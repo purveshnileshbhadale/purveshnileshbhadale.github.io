@@ -130,12 +130,17 @@ allows `https://purveshnileshbhadale.github.io`.
 
 ## Remaining TODOs
 
-Visible on the site by design. Search `TODO` in `index.html`:
+Visible on the site by design — 25 markers, all found by searching `TODO` in `index.html`:
 
-- identity line and role confirmation
-- proof for Li-Fi, VEDA, SCHOLARS, VAYU (photo, demo, screenshot, real number)
-- repo links for Deeps Guruwariya, DeepHelper, SmartPath AI, GamerzHub
-- Claurst upstream link; what he changed in DeepHelper; what works in VAYU
-- timeline start months
-- IJRPR papers decision
-- plug in the chatbot endpoint (see below)
+- **Identity (2):** confirm the hero line; confirm the role line (Founder / Co-Founder, B2C Solution Tech Co.)
+- **About (1):** one pass so the paragraph sounds like him, not like a website
+- **Li-Fi (3):** parts list (emitter, receiver, amplification); photo / video / circuit diagram; what broke and what he'd do differently
+- **VEDA (2):** screenshot or demo plus one real result from a real query; what the knowledge graph changed about how he reads papers
+- **SCHOLARS (4):** confirm the "Built" description matches the repo; link or exact count for the dataset; live link, screenshot, real test users; the "the hard part was the data" line
+- **VAYU (3):** which features work today vs. are stubs; 60-second demo video; what memory does to latency / why plugins were harder than the model
+- **Credits & repos (4):** repo links for Deeps Guruwariya and DeepHelper; Claurst upstream link; one line on what he changed in DeepHelper
+- **Status (3):** repo link and current status for the remaining builds (SmartPath AI, GamerzHub, one more)
+- **Writing (1):** decide whether to list the two IJRPR papers (July 2026) with the venue named honestly, or leave them out
+- **Timeline (2):** start month for each entry; add the final shortlist only when it's decided
+
+Plus one non-visible item: plug in the chatbot endpoint (see below).
