@@ -32,3 +32,6 @@ desktop.ini
 .vscode/*
 !.vscode/extensions.json
 *.swp
+
+# Local screenshot harness — never ship
+_frame.html

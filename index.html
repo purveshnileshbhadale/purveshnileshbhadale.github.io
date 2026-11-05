@@ -52,7 +52,7 @@
     <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/plex-sans-var.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="assets/css/style.css?v=1" />
+    <link rel="stylesheet" href="assets/css/style.css?v=3" />
 
     <script>
       // Set the theme before first paint so there is no flash.
@@ -128,7 +128,7 @@
     <!-- ============================== HEADER ============================== -->
     <header class="site-head">
       <div class="shell site-head__inner">
-        <a class="brand" href="#top" aria-label="Purvesh Nilesh Bhadale, back to top">
+        <a class="brand" href="#top">
           <span class="brand__mark">PNB</span>
           <span>Purvesh Bhadale</span>
         </a>
@@ -208,8 +208,18 @@
 
             <aside class="card-index" aria-label="At a glance">
               <div class="card-index__head">
+                <img
+                  class="card-index__portrait"
+                  src="assets/img/portrait-184.jpg"
+                  srcset="assets/img/portrait-184.jpg 184w, assets/img/portrait-368.jpg 368w"
+                  sizes="96px"
+                  width="96"
+                  height="96"
+                  alt="Purvesh Nilesh Bhadale"
+                  fetchpriority="high"
+                />
                 <span class="mono">At a glance</span>
-                <span class="mono" style="color: var(--accent)">2026</span>
+                <span class="card-index__year">2026</span>
               </div>
               <dl>
                 <div>
@@ -790,7 +800,7 @@
       </div>
     </dialog>
 
-    <script src="assets/js/site.js?v=1" defer></script>
-    <script src="assets/js/agent.js?v=1" defer></script>
+    <script src="assets/js/site.js?v=2" defer></script>
+    <script src="assets/js/agent.js?v=2" defer></script>
   </body>
 </html>

@@ -337,10 +337,8 @@ svg {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  background: var(--paper);
   border-bottom: 1px solid var(--rule-2);
-  backdrop-filter: saturate(140%) blur(10px);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
 }
 
 .site-head__inner {
@@ -587,10 +585,29 @@ svg {
 }
 .card-index__head {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding-bottom: 0.7rem;
+  align-items: center;
+  gap: 0.85rem;
+  padding-bottom: 0.9rem;
   border-bottom: 1px solid var(--rule-2);
+}
+
+.card-index__portrait {
+  display: block;
+  width: 96px;
+  height: 96px;
+  flex: none;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  filter: saturate(0.92);
+}
+
+.card-index__year {
+  margin-left: auto;
+  font: 500 0.62rem/1 var(--mono);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 .card-index dl {
   display: grid;
