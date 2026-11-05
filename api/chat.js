@@ -1,17 +1,25 @@
 /**
  * POST /api/chat — the only place the model is ever called from.
  *
- * The API key lives in the deployment environment (GROQ_API_KEY).
+ * The API key lives in the deployment environment (OPENROUTER_API_KEY).
  * It is never sent to the browser, and never committed to this repository.
  *
- * Deploy:  https://vercel.com/new  →  import this repo  →  add GROQ_API_KEY
+ * Deploy:  https://vercel.com/new  →  import this repo  →  add OPENROUTER_API_KEY
  * Notes:   GitHub Pages cannot run this file; Pages is static only.
  */
 
 const fs = require("node:fs");
 const path = require("node:path");
 
-const MODEL = "llama-3.3-70b-versatile";
+// Free models on OpenRouter get rate-limited upstream in waves, so the function
+// walks this list until one answers. Override with a comma-separated env var.
+const MODELS = (
+  process.env.OPENROUTER_MODEL ||
+  "nvidia/nemotron-3.5-lightning:free,google/gemma-4-31b-it:free,openrouter/free"
+)
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 const MAX_QUESTION_CHARS = 500;
 const MAX_TURNS = 6;
 const MAX_ANSWER_TOKENS = 260;
@@ -95,7 +103,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     res.status(503).json({ error: "The assistant is not configured." });
     return;
@@ -143,33 +151,41 @@ module.exports = async function handler(req, res) {
   const timeout = setTimeout(() => controller.abort(), 20000);
 
   try {
-    const upstream = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        temperature: 0.2,
-        max_tokens: MAX_ANSWER_TOKENS,
-        messages: [{ role: "system", content: SYSTEM_PROMPT + knowledge }, ...clean],
-      }),
-    });
+    let answer = null;
 
-    if (!upstream.ok) {
-      const detail = await upstream.text();
-      console.error("groq error", upstream.status, detail.slice(0, 400));
-      res.status(502).json({ error: "The assistant couldn't answer just now. Try again shortly." });
-      return;
+    for (const model of MODELS) {
+      const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://purveshnileshbhadale.github.io",
+          "X-Title": "Purvesh Bhadale portfolio assistant",
+        },
+        body: JSON.stringify({
+          model,
+          temperature: 0.2,
+          max_tokens: MAX_ANSWER_TOKENS,
+          messages: [{ role: "system", content: SYSTEM_PROMPT + knowledge }, ...clean],
+        }),
+      });
+
+      if (!upstream.ok) {
+        const detail = await upstream.text();
+        console.error("openrouter error", model, upstream.status, detail.slice(0, 200));
+        // a rate-limited free pool is worth retrying on the next model; anything else is not
+        if (upstream.status === 429 || upstream.status === 503) continue;
+        break;
+      }
+
+      const data = await upstream.json();
+      answer = data?.choices?.[0]?.message?.content?.trim() || null;
+      if (answer) break;
     }
 
-    const data = await upstream.json();
-    const answer = data?.choices?.[0]?.message?.content?.trim();
-
     if (!answer) {
-      res.status(502).json({ error: "The assistant returned nothing. Try again." });
+      res.status(502).json({ error: "The assistant couldn't answer just now. Try again shortly." });
       return;
     }
 

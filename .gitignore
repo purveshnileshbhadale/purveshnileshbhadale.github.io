@@ -35,3 +35,8 @@ desktop.ini
 
 # Local screenshot harness — never ship
 _frame.html
+
+# Vercel link metadata (created by `vercel link`; no secrets, but not ours to commit)
+.vercel/
+
+.vercel

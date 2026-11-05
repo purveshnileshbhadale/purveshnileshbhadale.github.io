@@ -50,7 +50,7 @@ Everything a crawler needs is already in place:
 | `<link rel="canonical">` | resolves duplicate/preview URLs to one address |
 | `index, follow, max-image-preview:large` | allows full-size image previews in results |
 | JSON-LD `@graph` | `Person` + `ProfilePage` + `WebSite`, so Google can build a knowledge panel |
-| `assets/img/og-cover.png` | 1200×630 social card, source in `assets/og/og-card.html` |
+| `assets/img/og-cover.jpg` | 1200×630 social card with portrait, source in `assets/og/og-card.html` |
 
 ### Steps to submit
 
@@ -89,44 +89,53 @@ To move off `*.github.io`, buy a domain and point it here:
 3. In **Settings → Pages**, set the custom domain and tick **Enforce HTTPS**
    (the certificate is issued after DNS resolves, usually within an hour).
 
-## The "ask about Purvesh" agent
+## The "ask about Purvesh" agent — live
 
-Built, but **not live** — GitHub Pages cannot run server-side code, and a key in the browser is
-readable by anyone. The model is called only from `api/chat.js`, which reads `GROQ_API_KEY`
-from the deployment environment.
+GitHub Pages cannot run server-side code, and a key in the browser is readable by
+anyone, so the site stays static on Pages and the model is called only from
+`api/chat.js`, deployed as a Vercel function. The key lives in Vercel's environment
+and never touches the repository.
 
 ```
 api/chat.js        POST /api/chat · reads knowledge.md · rate limited · CORS pinned
-assets/js/agent.js stays hidden unless the endpoint is deployed and answering
-knowledge.md       the only context the model gets
+assets/js/agent.js reveals the panel only after the endpoint answers a health check
+knowledge.md       the only context the model gets (built from his application documents)
 ```
 
-### Turning it on
+- Endpoint: `https://purveshnileshbhadale.vercel.app/api/chat`
+- Provider: OpenRouter (`OPENROUTER_API_KEY`, stored encrypted in Vercel Production).
+- Model: free-tier only (`OPENROUTER_MODEL`, comma-separated fallback list — free pools
+  rate-limit upstream in waves, so the function walks the list until one answers).
+  Default: `nvidia/nemotron-3.5-lightning:free,google/gemma-4-31b-it:free,openrouter/free`.
+- The Vercel deployment also serves the site, but sends `X-Robots-Tag: noindex` so only
+  the GitHub Pages URL ranks.
 
-1. Rotate the key you pasted into chat (it was public). Create a new one at
-   <https://console.groq.com/keys>.
-2. Deploy this repo to Vercel:
+### Changing it
+
+1. `knowledge.md` is the single source of truth — edit it, then redeploy:
    ```bash
    npx vercel --prod
    ```
-   Add `GROQ_API_KEY` in **Project → Settings → Environment Variables** (Production + Preview).
-   Never add it to a `.env` file that gets committed — `.gitignore` covers `.env*` already.
-3. Copy the deployment URL and set it in `index.html`:
+2. To rotate the model key: `vercel env rm OPENROUTER_API_KEY production`, then
+   `vercel env add OPENROUTER_API_KEY production` and redeploy. Never commit a key —
+   `.gitignore` already covers `.env*` and `.vercel/`.
+3. The endpoint URL lives in one place in `index.html`:
    ```html
-   <div class="agent" data-agent-endpoint="https://your-app.vercel.app/api/chat" hidden>
+   <div class="agent" data-agent-endpoint="https://purveshnileshbhadale.vercel.app/api/chat" hidden>
    ```
-4. Commit and push to `main`. The panel reveals itself only after a successful health
-   check, so the public site never shows a dead widget.
-
-The site can stay on GitHub Pages; the page-specific CORS list in `api/chat.js` already
-allows `https://purveshnileshbhadale.github.io`.
+   If the function is ever down, the panel hides itself again — the public site never
+   shows a dead widget.
 
 ### Guardrails that are in place
 
 - Answers only from `knowledge.md`; anything else returns "I don't know".
+- Private facts (phone, address, date of birth, family, passport, funding) are not in
+  `knowledge.md` at all, and the prompt refuses them on principle.
 - 500-character questions, 6-turn history, 260 output tokens.
 - 8 requests per 5 minutes per IP (in-memory, per instance — move to Upstash if traffic grows).
 - 20-second upstream timeout, `no-store` responses, error details logged server-side only.
+- OpenRouter free tier: 50 requests/day on free models — enough for a portfolio, not
+  for traffic. Watch the usage dashboard before an application deadline week.
 
 ## Remaining TODOs
 
