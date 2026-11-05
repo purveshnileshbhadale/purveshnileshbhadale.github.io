@@ -90,13 +90,21 @@
     })
     .filter(Boolean);
 
+  var sectionTops = [];
+  function measureTops() {
+    sectionTops = watched.map(function (section) {
+      return section.offsetTop;
+    });
+  }
+  measureTops();
+
   function markActive() {
     if (!watched.length) return;
     var offset = window.scrollY + 140;
     var active = null;
 
-    watched.forEach(function (section) {
-      if (section.offsetTop <= offset) active = section;
+    watched.forEach(function (section, i) {
+      if (sectionTops[i] <= offset) active = section;
     });
 
     navLinks.forEach(function (a) {
@@ -105,6 +113,22 @@
       else a.removeAttribute("aria-current");
     });
   }
+
+  // section positions shift when fonts swap in; re-measure then and on resize
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      measureTops();
+      markActive();
+    });
+  }
+  window.addEventListener(
+    "resize",
+    function () {
+      measureTops();
+      markActive();
+    },
+    { passive: true }
+  );
 
   var ticking = false;
   window.addEventListener(
