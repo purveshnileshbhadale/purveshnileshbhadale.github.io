@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found — Purvesh Nilesh Bhadale</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#faf8f3" />
+    <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/assets/css/style.css?v=1" />
+    <script>
+      (function () {
+        document.documentElement.classList.add("js");
+        try {
+          var saved = localStorage.getItem("theme");
+          var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = saved || (dark ? "dark" : "light");
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="site-head">
+      <div class="shell site-head__inner">
+        <a class="brand" href="/" aria-label="Purvesh Nilesh Bhadale, home">
+          <span class="brand__mark">PNB</span>
+          <span>Purvesh Bhadale</span>
+        </a>
+        <div class="head-tools">
+          <button class="icon-btn" type="button" data-theme-toggle>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.2" />
+              <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" />
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z" />
+            </svg>
+            <span class="visually-hidden">Toggle light and dark mode</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="shell" style="padding-block: clamp(4rem, 14vh, 9rem)">
+      <p class="mono" style="color: var(--accent)">Error 404</p>
+      <h1 style="font-size: clamp(3rem, 12vw, 7rem); margin-top: 0.4rem">Nothing filed here.</h1>
+      <p style="max-width: 40ch; margin-top: 1.25rem; color: var(--ink-2)">
+        This page is missing, or the link is older than the site. The work, the evidence, and the
+        contact details are all on the front page.
+      </p>
+      <p style="margin-top: 2rem">
+        <a class="btn btn--solid" href="/">Back to the front page <span class="btn__arrow" aria-hidden="true">→</span></a>
+      </p>
+    </main>
+
+    <footer class="site-foot">
+      <div class="shell">
+        <div class="foot__meta" style="border-top: 0; margin-top: 0; padding-top: 0">
+          <span>Purvesh Nilesh Bhadale</span>
+          <a href="https://github.com/purveshnileshbhadale">GitHub ↗</a>
+          <a href="mailto:purveshnileshbhadale@gmail.com">Email</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/assets/js/site.js?v=1" defer></script>
+  </body>
+</html>

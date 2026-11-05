@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Nothing here needs hiding. The 404 page is excluded by its own meta tag.
+
+Sitemap: https://purveshnileshbhadale.github.io/sitemap.xml
